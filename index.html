@@ -6,7 +6,7 @@
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
       
       
-      <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js"></script>
+      
       
       
       <style>
@@ -24,120 +24,292 @@
     
       <div class="crossnote markdown-preview  ">
       
-<h1 id="seminario-1">seminario-1 </h1>
-<h2 id="markdown">Markdown </h2>
+<h1 id="bridge-padrão-de-projeto-estrutural">Bridge (Padrão de Projeto Estrutural) </h1>
+<h3 id="personagens-de-rpg-x-renderização">Personagens de RPG X Renderização </h3>
+<p>Exemplo feito pelo time do Object Pool</p>
+<h2 id="motivação">Motivação </h2>
+<p>Imagine o cenário de desenvolvimento de um jogo RPG em que exista uma variação de personagens representados por suas próprias classes, como <code>Clerigo</code>, <code>Guerreiro</code> ou <code>Ladino</code> e também variações de como a renderização desses personagens podem ser implementadas. Levando em conta que novas classes podem surgir no decorrer de atualizações do jogo ou mesmo novas implementações de renderização, a pior maneira de resolver este problema seria criando uma classe para cada combinação de personagem X renderização possível. O Padrão <strong>Bridge</strong> tem o objetivo de eliminar a necessidade de criar várias classes resultantes de uma extensão no projeto, seja pela adição de uma nova abstração ou implementação.</p>
+<p>O padrão Bridge resolve esse problema de acoplamento separando a parte do código que se refere a abstração e a parte da implementação. Fazendo com que a adição de uma nova abstração não exija o desenvolvimento de múltiplas variantes para cada implementação e virse-versa.</p>
+<p>No exemplo em questão, a renderização dos personagens de um RPG está sendo representada simplificadamente através de impressões no console. As implementações imprimem as informações da interação entre personagem em um diferentes idiomas.</p>
+<h2 id="estrutura">Estrutura </h2>
+<p class="plantuml"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentstyletype="text/css" data-diagram-type="CLASS" height="365px" preserveAspectRatio="none" style="width:819px;height:365px;background:#FFFFFF;" version="1.1" viewBox="0 0 819 365" width="819px" zoomAndPan="magnify"><defs></defs><g><!--class RpgRender--><g class="entity" data-entity="RpgRender" data-source-line="1" data-uid="ent0002" id="entity_RpgRender"><rect fill="#F1F1F1" height="64.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="159.0137" x="456.9" y="88.48"></rect><ellipse cx="493.9693" cy="104.48" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"></ellipse><path d="M489.8912,100.2456 L489.8912,98.0894 L497.2818,98.0894 L497.2818,100.2456 L494.8131,100.2456 L494.8131,108.3238 L497.2818,108.3238 L497.2818,110.48 L489.8912,110.48 L489.8912,108.3238 L492.36,108.3238 L492.36,100.2456 L489.8912,100.2456 Z " fill="#000000"></path><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="77.9707" x="512.8736" y="109.3267">RpgRender</text><line style="stroke:#181818;stroke-width:0.5;" x1="457.9" x2="614.9137" y1="120.48" y2="120.48"></line><line style="stroke:#181818;stroke-width:0.5;" x1="457.9" x2="614.9137" y1="128.48" y2="128.48"></line><ellipse cx="467.9" cy="142.1284" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="133.0137" x="476.9" y="145.4751">renderizarAtaque()</text></g><!--class EnglishRender--><g class="entity" data-entity="EnglishRender" data-source-line="6" data-uid="ent0003" id="entity_EnglishRender"><rect fill="#F1F1F1" height="64.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="159.0137" x="456.9" y="294.26"></rect><ellipse cx="483.5965" cy="310.26" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"></ellipse><path d="M486.5652,315.9006 Q485.9871,316.1975 485.3465,316.3381 Q484.7059,316.4944 484.0027,316.4944 Q481.5027,316.4944 480.1746,314.8538 Q478.8621,313.1975 478.8621,310.0725 Q478.8621,306.9475 480.1746,305.2913 Q481.5027,303.635 484.0027,303.635 Q484.7059,303.635 485.3465,303.7913 Q486.0027,303.9475 486.5652,304.2444 L486.5652,306.9631 Q485.9402,306.385 485.3465,306.1194 Q484.7527,305.8381 484.1277,305.8381 Q482.784,305.8381 482.0965,306.9163 Q481.409,307.9788 481.409,310.0725 Q481.409,312.1663 482.0965,313.2444 Q482.784,314.3069 484.1277,314.3069 Q484.7527,314.3069 485.3465,314.0413 Q485.9402,313.76 486.5652,313.1819 L486.5652,315.9006 Z " fill="#000000"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="101.0215" x="500.1957" y="315.1067">EnglishRender</text><line style="stroke:#181818;stroke-width:0.5;" x1="457.9" x2="614.9137" y1="326.26" y2="326.26"></line><line style="stroke:#181818;stroke-width:0.5;" x1="457.9" x2="614.9137" y1="334.26" y2="334.26"></line><ellipse cx="467.9" cy="347.9084" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="133.0137" x="476.9" y="351.2551">renderizarAtaque()</text></g><!--class PortugueseRender--><g class="entity" data-entity="PortugueseRender" data-source-line="10" data-uid="ent0004" id="entity_PortugueseRender"><rect fill="#F1F1F1" height="64.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="161.876" x="650.46" y="294.26"></rect><ellipse cx="665.46" cy="310.26" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"></ellipse><path d="M668.4288,315.9006 Q667.8506,316.1975 667.21,316.3381 Q666.5694,316.4944 665.8663,316.4944 Q663.3663,316.4944 662.0381,314.8538 Q660.7256,313.1975 660.7256,310.0725 Q660.7256,306.9475 662.0381,305.2913 Q663.3663,303.635 665.8663,303.635 Q666.5694,303.635 667.21,303.7913 Q667.8663,303.9475 668.4288,304.2444 L668.4288,306.9631 Q667.8038,306.385 667.21,306.1194 Q666.6163,305.8381 665.9913,305.8381 Q664.6475,305.8381 663.96,306.9163 Q663.2725,307.9788 663.2725,310.0725 Q663.2725,312.1663 663.96,313.2444 Q664.6475,314.3069 665.9913,314.3069 Q666.6163,314.3069 667.21,314.0413 Q667.8038,313.76 668.4288,313.1819 L668.4288,315.9006 Z " fill="#000000"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="129.876" x="679.46" y="315.1067">PortugueseRender</text><line style="stroke:#181818;stroke-width:0.5;" x1="651.46" x2="811.336" y1="326.26" y2="326.26"></line><line style="stroke:#181818;stroke-width:0.5;" x1="651.46" x2="811.336" y1="334.26" y2="334.26"></line><ellipse cx="661.46" cy="347.9084" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="133.0137" x="670.46" y="351.2551">renderizarAtaque()</text></g><!--class RpgCharacter--><g class="entity" data-entity="RpgCharacter" data-source-line="14" data-uid="ent0005" id="entity_RpgCharacter"><rect fill="#F1F1F1" height="227.2656" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="159.6357" x="198.58" y="7"></rect><ellipse cx="227.5375" cy="23" fill="#A9DCDF" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"></ellipse><path d="M227.6468,18.3438 L226.4906,23.4219 L228.8187,23.4219 L227.6468,18.3438 Z M226.1625,16.1094 L229.1468,16.1094 L232.5062,28.5 L230.0531,28.5 L229.2875,25.4375 L226.0062,25.4375 L225.2562,28.5 L222.8187,28.5 L226.1625,16.1094 Z " fill="#000000"></path><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="96.6191" x="244.6391" y="27.8467">RpgCharacter</text><line style="stroke:#181818;stroke-width:0.5;" x1="199.58" x2="357.2157" y1="39" y2="39"></line><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1;" width="6" x="206.58" y="49.6484"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="133.6357" x="218.58" y="55.9951">render: RpgRender</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4.4502" x="218.58" y="72.292">&nbsp;</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1;" width="6" x="206.58" y="82.2422"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="57.0596" x="218.58" y="88.5889">vida: int</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1;" width="6" x="206.58" y="98.5391"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62.9453" x="218.58" y="104.8857">forca: int</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1;" width="6" x="206.58" y="114.8359"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103.3252" x="218.58" y="121.1826">velocidade: int</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1;" width="6" x="206.58" y="131.1328"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103.4072" x="218.58" y="137.4795">resistencia: int</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1;" width="6" x="206.58" y="147.4297"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="87.999" x="218.58" y="153.7764">destreza: int</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1;" width="6" x="206.58" y="163.7266"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108.6025" x="218.58" y="170.0732">inteligencia: int</text><line style="stroke:#181818;stroke-width:0.5;" x1="199.58" x2="357.2157" y1="177.375" y2="177.375"></line><ellipse cx="209.58" cy="191.0234" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="82.79" x="218.58" y="194.3701">setRender()</text><ellipse cx="209.58" cy="207.3203" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88.8057" x="218.58" y="210.667">calcAtaque()</text><ellipse cx="209.58" cy="223.6172" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="133.0137" x="218.58" y="226.9639">renderizarAtaque()</text></g><!--class Clerigo--><g class="entity" data-entity="Clerigo" data-source-line="29" data-uid="ent0006" id="entity_Clerigo"><rect fill="#F1F1F1" height="64.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="114.8057" x="7" y="294.26"></rect><ellipse cx="37.0434" cy="310.26" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"></ellipse><path d="M40.0121,315.9006 Q39.434,316.1975 38.7934,316.3381 Q38.1527,316.4944 37.4496,316.4944 Q34.9496,316.4944 33.6215,314.8538 Q32.309,313.1975 32.309,310.0725 Q32.309,306.9475 33.6215,305.2913 Q34.9496,303.635 37.4496,303.635 Q38.1527,303.635 38.7934,303.7913 Q39.4496,303.9475 40.0121,304.2444 L40.0121,306.9631 Q39.3871,306.385 38.7934,306.1194 Q38.1996,305.8381 37.5746,305.8381 Q36.2309,305.8381 35.5434,306.9163 Q34.8559,307.9788 34.8559,310.0725 Q34.8559,312.1663 35.5434,313.2444 Q36.2309,314.3069 37.5746,314.3069 Q38.1996,314.3069 38.7934,314.0413 Q39.3871,313.76 40.0121,313.1819 L40.0121,315.9006 Z " fill="#000000"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="49.376" x="54.3863" y="315.1067">Clerigo</text><line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="120.8057" y1="326.26" y2="326.26"></line><line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="120.8057" y1="334.26" y2="334.26"></line><ellipse cx="18" cy="347.9084" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88.8057" x="27" y="351.2551">calcAtaque()</text></g><!--class Guerreiro--><g class="entity" data-entity="Guerreiro" data-source-line="33" data-uid="ent0007" id="entity_Guerreiro"><rect fill="#F1F1F1" height="64.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="114.8057" x="157" y="294.26"></rect><ellipse cx="179.2606" cy="310.26" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"></ellipse><path d="M182.2294,315.9006 Q181.6513,316.1975 181.0106,316.3381 Q180.37,316.4944 179.6669,316.4944 Q177.1669,316.4944 175.8388,314.8538 Q174.5263,313.1975 174.5263,310.0725 Q174.5263,306.9475 175.8388,305.2913 Q177.1669,303.635 179.6669,303.635 Q180.37,303.635 181.0106,303.7913 Q181.6669,303.9475 182.2294,304.2444 L182.2294,306.9631 Q181.6044,306.385 181.0106,306.1194 Q180.4169,305.8381 179.7919,305.8381 Q178.4481,305.8381 177.7606,306.9163 Q177.0731,307.9788 177.0731,310.0725 Q177.0731,312.1663 177.7606,313.2444 Q178.4481,314.3069 179.7919,314.3069 Q180.4169,314.3069 181.0106,314.0413 Q181.6044,313.76 182.2294,313.1819 L182.2294,315.9006 Z " fill="#000000"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="66.6709" x="194.8741" y="315.1067">Guerreiro</text><line style="stroke:#181818;stroke-width:0.5;" x1="158" x2="270.8057" y1="326.26" y2="326.26"></line><line style="stroke:#181818;stroke-width:0.5;" x1="158" x2="270.8057" y1="334.26" y2="334.26"></line><ellipse cx="168" cy="347.9084" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88.8057" x="177" y="351.2551">calcAtaque()</text></g><!--class Ladino--><g class="entity" data-entity="Ladino" data-source-line="37" data-uid="ent0008" id="entity_Ladino"><rect fill="#F1F1F1" height="64.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="114.8057" x="307" y="294.26"></rect><ellipse cx="338.2954" cy="310.26" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"></ellipse><path d="M341.2641,315.9006 Q340.686,316.1975 340.0454,316.3381 Q339.4047,316.4944 338.7016,316.4944 Q336.2016,316.4944 334.8735,314.8538 Q333.561,313.1975 333.561,310.0725 Q333.561,306.9475 334.8735,305.2913 Q336.2016,303.635 338.7016,303.635 Q339.4047,303.635 340.0454,303.7913 Q340.7016,303.9475 341.2641,304.2444 L341.2641,306.9631 Q340.6391,306.385 340.0454,306.1194 Q339.4516,305.8381 338.8266,305.8381 Q337.4829,305.8381 336.7954,306.9163 Q336.1079,307.9788 336.1079,310.0725 Q336.1079,312.1663 336.7954,313.2444 Q337.4829,314.3069 338.8266,314.3069 Q339.4516,314.3069 340.0454,314.0413 Q340.6391,313.76 341.2641,313.1819 L341.2641,315.9006 Z " fill="#000000"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="46.5938" x="355.9166" y="315.1067">Ladino</text><line style="stroke:#181818;stroke-width:0.5;" x1="308" x2="420.8057" y1="326.26" y2="326.26"></line><line style="stroke:#181818;stroke-width:0.5;" x1="308" x2="420.8057" y1="334.26" y2="334.26"></line><ellipse cx="318" cy="347.9084" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88.8057" x="327" y="351.2551">calcAtaque()</text></g><!--reverse link RpgCharacter to RpgRender--><g class="link" data-entity-1="RpgCharacter" data-entity-2="RpgRender" data-source-line="41" data-uid="lnk9" id="link_RpgCharacter_RpgRender"><path codeline="41" d="M370.52,120.63 C403.18,120.63 423.84,120.63 456.5,120.63 " fill="none" id="RpgCharacter-backto-RpgRender" style="stroke:#181818;stroke-width:1;"></path><polygon fill="#181818" points="358.52,120.63,364.52,124.63,370.52,120.63,364.52,116.63,358.52,120.63" style="stroke:#181818;stroke-width:1;"></polygon></g><!--reverse link RpgRender to EnglishRender--><g class="link" data-entity-1="RpgRender" data-entity-2="EnglishRender" data-source-line="43" data-uid="lnk10" id="link_RpgRender_EnglishRender"><path codeline="43" d="M536.4,171.02 C536.4,209.32 536.4,255.67 536.4,293.98 " fill="none" id="RpgRender-backto-EnglishRender" style="stroke:#181818;stroke-width:1;"></path><polygon fill="none" points="536.4,153.02,530.4,171.02,542.4,171.02,536.4,153.02" style="stroke:#181818;stroke-width:1;"></polygon></g><!--reverse link RpgRender to PortugueseRender--><g class="link" data-entity-1="RpgRender" data-entity-2="PortugueseRender" data-source-line="44" data-uid="lnk11" id="link_RpgRender_PortugueseRender"><path codeline="44" d="M578.8847,166.025 C615.5347,204.325 664.67,255.67 701.33,293.98 " fill="none" id="RpgRender-backto-PortugueseRender" style="stroke:#181818;stroke-width:1;"></path><polygon fill="none" points="566.44,153.02,574.5497,170.1732,583.2197,161.8767,566.44,153.02" style="stroke:#181818;stroke-width:1;"></polygon></g><!--reverse link RpgCharacter to Clerigo--><g class="link" data-entity-1="RpgCharacter" data-entity-2="Clerigo" data-source-line="46" data-uid="lnk12" id="link_RpgCharacter_Clerigo"><path codeline="46" d="M185.0737,210.5019 C150.2037,243.7019 124.33,268.35 97.52,293.88 " fill="none" id="RpgCharacter-backto-Clerigo" style="stroke:#181818;stroke-width:1;"></path><polygon fill="none" points="198.11,198.09,180.9364,206.1565,189.211,214.8473,198.11,198.09" style="stroke:#181818;stroke-width:1;"></polygon></g><!--reverse link RpgCharacter to Guerreiro--><g class="link" data-entity-1="RpgCharacter" data-entity-2="Guerreiro" data-source-line="47" data-uid="lnk13" id="link_RpgCharacter_Guerreiro"><path codeline="47" d="M237.5482,251.7235 C230.6882,273.5735 229.43,277.57 224.28,293.97 " fill="none" id="RpgCharacter-backto-Guerreiro" style="stroke:#181818;stroke-width:1;"></path><polygon fill="none" points="242.94,234.55,231.8237,249.9262,243.2727,253.5207,242.94,234.55" style="stroke:#181818;stroke-width:1;"></polygon></g><!--reverse link RpgCharacter to Ladino--><g class="link" data-entity-1="RpgCharacter" data-entity-2="Ladino" data-source-line="48" data-uid="lnk14" id="link_RpgCharacter_Ladino"><path codeline="48" d="M333.0579,251.134 C342.2779,272.984 344.21,277.57 351.14,293.97 " fill="none" id="RpgCharacter-backto-Ladino" style="stroke:#181818;stroke-width:1;"></path><polygon fill="none" points="326.06,234.55,327.5299,253.4666,338.5859,248.8014,326.06,234.55" style="stroke:#181818;stroke-width:1;"></polygon></g><!--SRC=[ZL8xRWCX5Emv1MK-sWjOQIBBIfCYyWrUO8oVXDZamRfmxBk7U15ULhOsL30VDFE0GuBio41llzmMmKBqZr8whsSjbpCVILuJVGzuU5HdfOod6FKcECznNotBZezUqk06HFpBH9yn2PcaHtUEjzxJ7r2TNN6khjbL8GviQQKvf7BUzM8Qu03VcooocAA2o34X66x45ZaAZWsMT_3i9jhI9YADMNAD4J7aJMssFAUrpuphwtWQUrMz3H01ovBkdIo7-w9ch4_TT9BN3_5owhhsmUVa_6rd5ryqfTSDfdQvmOtvVm40]--></g></svg></p><h2 id="participantes">Participantes </h2>
 <ul>
-<li>item</li>
-<li>item</li>
-<li>item</li>
+<li><strong>RpgCharacter (Abstração)</strong>
+<ul>
+<li>Uma classe abstrata que define a interface de abstração.</li>
+<li>Mantém uma referência para um objeto implementador.</li>
+<li>Define operações de alto nível que chamam o implementador.</li>
 </ul>
-<ol>
-<li>valor</li>
-<li>valor</li>
-<li>valor</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>title1</th>
-<th>title2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>b</td>
-</tr>
-</tbody>
-</table>
-<p><a href="https://docs.github.com/pt/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">Markdown</a></p>
-<h2 id="plantuml">Plantuml </h2>
-<p align="center" class="plantuml"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentstyletype="text/css" data-diagram-type="CLASS" height="321px" preserveAspectRatio="none" style="width:784px;height:321px;background:#FFFFFF;" version="1.1" viewBox="0 0 784 321" width="784px" zoomAndPan="magnify"><title>Animal example</title><defs></defs><g><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="126.1846" x="321.9583" y="22.9951">Animal example</text><g id="elem_n1"><path d="M622.94,88.3269 L622.94,113.4597 L777.1011,113.4597 L777.1011,98.3269 L767.1011,88.3269 L622.94,88.3269 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"></path><path d="M767.1011,88.3269 L767.1011,98.3269 L777.1011,98.3269 L767.1011,88.3269 " fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"></path><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="133.1611" x="628.94" y="105.3938">From Duck till Zebra</text></g><!--class Animal--><g id="elem_Animal"><rect codeline="3" fill="#F1F1F1" height="113.1875" id="Animal" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="168.9326" x="277.56" y="44.2969"></rect><ellipse cx="333.5532" cy="60.2969" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"></ellipse><path d="M336.5219,65.9375 Q335.9438,66.2344 335.3032,66.375 Q334.6625,66.5313 333.9594,66.5313 Q331.4594,66.5313 330.1313,64.8906 Q328.8188,63.2344 328.8188,60.1094 Q328.8188,56.9844 330.1313,55.3281 Q331.4594,53.6719 333.9594,53.6719 Q334.6625,53.6719 335.3032,53.8281 Q335.9594,53.9844 336.5219,54.2813 L336.5219,57 Q335.8969,56.4219 335.3032,56.1563 Q334.7094,55.875 334.0844,55.875 Q332.7407,55.875 332.0532,56.9531 Q331.3657,58.0156 331.3657,60.1094 Q331.3657,62.2031 332.0532,63.2813 Q332.7407,64.3438 334.0844,64.3438 Q334.7094,64.3438 335.3032,64.0781 Q335.8969,63.7969 336.5219,63.2188 L336.5219,65.9375 Z " fill="#000000"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.4463" x="354.0532" y="65.1436">Animal</text><line style="stroke:#181818;stroke-width:0.5;" x1="278.56" x2="445.4926" y1="76.2969" y2="76.2969"></line><ellipse cx="288.56" cy="89.9453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.7813" x="297.56" y="93.292">int age</text><ellipse cx="288.56" cy="106.2422" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="95.8604" x="297.56" y="109.5889">String gender</text><line style="stroke:#181818;stroke-width:0.5;" x1="278.56" x2="445.4926" y1="116.8906" y2="116.8906"></line><ellipse cx="288.56" cy="130.5391" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="142.9326" x="297.56" y="133.8857">boolean isMammal()</text><ellipse cx="288.56" cy="146.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="81.3203" x="297.56" y="150.1826">void mate()</text></g><!--class Duck--><g id="elem_Duck"><rect codeline="24" fill="#F1F1F1" height="96.8906" id="Duck" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="142.9697" x="207.54" y="217.4869"></rect><ellipse cx="257.0459" cy="233.4869" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"></ellipse><path d="M260.0146,239.1275 Q259.4365,239.4244 258.7959,239.565 Q258.1552,239.7213 257.4521,239.7213 Q254.9521,239.7213 253.624,238.0806 Q252.3115,236.4244 252.3115,233.2994 Q252.3115,230.1744 253.624,228.5181 Q254.9521,226.8619 257.4521,226.8619 Q258.1552,226.8619 258.7959,227.0181 Q259.4521,227.1744 260.0146,227.4713 L260.0146,230.19 Q259.3896,229.6119 258.7959,229.3463 Q258.2021,229.065 257.5771,229.065 Q256.2334,229.065 255.5459,230.1431 Q254.8584,231.2056 254.8584,233.2994 Q254.8584,235.3931 255.5459,236.4713 Q256.2334,237.5338 257.5771,237.5338 Q258.2021,237.5338 258.7959,237.2681 Q259.3896,236.9869 260.0146,236.4088 L260.0146,239.1275 Z " fill="#000000"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="35.458" x="277.5459" y="238.3336">Duck</text><line style="stroke:#181818;stroke-width:0.5;" x1="208.54" x2="349.5097" y1="249.4869" y2="249.4869"></line><ellipse cx="218.54" cy="263.1353" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116.9697" x="227.54" y="266.482">String beakColor</text><line style="stroke:#181818;stroke-width:0.5;" x1="208.54" x2="349.5097" y1="273.7838" y2="273.7838"></line><ellipse cx="218.54" cy="287.4322" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="47.1953" x="227.54" y="290.7789">swim()</text><ellipse cx="218.54" cy="303.7291" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="53.0674" x="227.54" y="307.0757">quack()</text></g><!--class Fish--><g id="elem_Fish"><rect codeline="15" fill="#F1F1F1" height="80.5938" id="Fish" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="119.6182" x="385.22" y="225.6369"></rect><ellipse cx="426.999" cy="241.6369" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"></ellipse><path d="M429.9677,247.2775 Q429.3896,247.5744 428.749,247.715 Q428.1083,247.8712 427.4052,247.8712 Q424.9052,247.8712 423.5771,246.2306 Q422.2646,244.5744 422.2646,241.4494 Q422.2646,238.3244 423.5771,236.6681 Q424.9052,235.0119 427.4052,235.0119 Q428.1083,235.0119 428.749,235.1681 Q429.4052,235.3244 429.9677,235.6212 L429.9677,238.34 Q429.3427,237.7619 428.749,237.4962 Q428.1552,237.215 427.5302,237.215 Q426.1865,237.215 425.499,238.2931 Q424.8115,239.3556 424.8115,241.4494 Q424.8115,243.5431 425.499,244.6212 Q426.1865,245.6837 427.5302,245.6837 Q428.1552,245.6837 428.749,245.4181 Q429.3427,245.1369 429.9677,244.5587 L429.9677,247.2775 Z " fill="#000000"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="28.1094" x="446.9498" y="246.4836">Fish</text><line style="stroke:#181818;stroke-width:0.5;" x1="386.22" x2="503.8382" y1="257.6369" y2="257.6369"></line><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1;" width="6" x="393.22" y="268.2853"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="93.6182" x="405.22" y="274.632">int sizeInFeet</text><line style="stroke:#181818;stroke-width:0.5;" x1="386.22" x2="503.8382" y1="281.9338" y2="281.9338"></line><rect fill="#F24D5C" height="6" style="stroke:#C82930;stroke-width:1;" width="6" x="393.22" y="292.5822"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="58.9873" x="405.22" y="298.9289">canEat()</text></g><!--class Zebra--><g id="elem_Zebra"><rect codeline="19" fill="#F1F1F1" height="80.5938" id="Zebra" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="106.6572" x="481.7" y="60.5969"></rect><ellipse cx="511.6542" cy="76.5969" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"></ellipse><path d="M514.6229,82.2375 Q514.0448,82.5344 513.4042,82.675 Q512.7635,82.8312 512.0604,82.8312 Q509.5604,82.8312 508.2323,81.1906 Q506.9198,79.5344 506.9198,76.4094 Q506.9198,73.2844 508.2323,71.6281 Q509.5604,69.9719 512.0604,69.9719 Q512.7635,69.9719 513.4042,70.1281 Q514.0604,70.2844 514.6229,70.5812 L514.6229,73.3 Q513.9979,72.7219 513.4042,72.4562 Q512.8104,72.175 512.1854,72.175 Q510.8417,72.175 510.1542,73.2531 Q509.4667,74.3156 509.4667,76.4094 Q509.4667,78.5031 510.1542,79.5812 Q510.8417,80.6437 512.1854,80.6437 Q512.8104,80.6437 513.4042,80.3781 Q513.9979,80.0969 514.6229,79.5187 L514.6229,82.2375 Z " fill="#000000"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41.4258" x="528.9773" y="81.4436">Zebra</text><line style="stroke:#181818;stroke-width:0.5;" x1="482.7" x2="587.3572" y1="92.5969" y2="92.5969"></line><ellipse cx="492.7" cy="106.2453" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="80.6572" x="501.7" y="109.592">bool is_wild</text><line style="stroke:#181818;stroke-width:0.5;" x1="482.7" x2="587.3572" y1="116.8937" y2="116.8937"></line><ellipse cx="492.7" cy="130.5422" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1;"></ellipse><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="34.4258" x="501.7" y="133.8889">run()</text></g><g id="elem_GMN8"><path d="M6,230.6669 L6,301.1981 A0,0 0 0 0 6,301.1981 L172.0503,301.1981 A0,0 0 0 0 172.0503,301.1981 L172.0503,269.9269 L207.05,265.9269 L172.0503,261.9269 L172.0503,240.6669 L162.0503,230.6669 L6,230.6669 A0,0 0 0 0 6,230.6669 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"></path><path d="M162.0503,230.6669 L162.0503,240.6669 L172.0503,240.6669 L162.0503,230.6669 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"></path><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="43.3672" x="12" y="247.7338">can fly</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="61.166" x="12" y="262.8666">can swim</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55.0405" x="12" y="277.9994">can dive</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="145.0503" x="12" y="293.1322">can help in debugging</text></g><!--reverse link Animal to Duck--><g id="link_Animal_Duck"><path d="M325.5244,173.5882 C315.6644,192.9582 312.86,198.4669 303.35,217.1369 " fill="none" id="Animal-backto-Duck" style="stroke:#181818;stroke-width:1;"></path><polygon fill="none" points="333.69,157.5469,320.1773,170.8663,330.8715,176.31,333.69,157.5469" style="stroke:#181818;stroke-width:1;"></polygon></g><!--reverse link Animal to Zebra--><g id="link_Animal_Zebra"><path codeline="28" d="M464.84,100.8969 C476.32,100.8969 469.8,100.8969 481.28,100.8969 " fill="none" id="Animal-backto-Zebra" style="stroke:#181818;stroke-width:1;"></path><polygon fill="none" points="446.84,100.8969,464.84,106.8969,464.84,94.8969,446.84,100.8969" style="stroke:#181818;stroke-width:1;"></polygon></g><!--reverse link Animal to Fish--><g id="link_Animal_Fish"><path codeline="31" d="M398.5222,173.5899 C409.8322,195.8199 414.45,204.8769 424.8,225.2069 " fill="none" id="Animal-backto-Fish" style="stroke:#181818;stroke-width:1;"></path><polygon fill="none" points="390.36,157.5469,393.1746,176.3106,403.8699,170.8691,390.36,157.5469" style="stroke:#181818;stroke-width:1;"></polygon></g><!--SRC=[XL6nJiGm3Dtp5TOjW507rXCB0YhTmCI6a93RkgrLDob9UbSu-7VI98WJ0sHodlFydbyyUw4jt6WUKO0M72SXfOqds9JMZ70trmDu5e4dgYnk01teArKBEfTfHmNXNBBsW1sbowEth3leI3Ta4mILCKAeWTq3Ze5tVf4RUyCDZEWf89_gR4ABWD2JHLqZj5oZXGXMo8l9sj4OBJue_3AIjIl2uTQ8oVBkmEEtukkCzH35qgoINP_8nRg5utVQwPB89wn6VO_-v7sCuhZsqhnrix3Mou6bIOYTTNn_OZQbAjJwBOI9qChRirwBrLcg6jvJgdgI2JWWLCrT5zPHV-LYGB0nAl_YzKUH78BwFymVJX5Z-080]--></g></svg></p><p><a href="https://plantuml.com/class-diagram">PlantUML Class Diagram</a></p>
-<h2 id="mermaid">Mermaid </h2>
-<div align="center" class="mermaid">---
-title: Animal example
----
-classDiagram
-    note "From Duck till Zebra"
-    Animal &lt;|-- Duck
-    note for Duck "can fly\ncan swim\ncan dive\ncan help in debugging"
-    Animal &lt;|-- Fish
-    Animal &lt;|-- Zebra
-    Animal : +int age
-    Animal : +String gender
-    Animal: +isMammal()
-    Animal: +mate()
-    class Duck{
-        +String beakColor
-        +swim()
-        +quack()
-    }
-    class Fish{
-        -int sizeInFeet
-        -canEat()
-    }
-    class Zebra{
-        +bool is_wild
-        +run()
-    }
+</li>
+<li><strong>RpgRender (Implementação)</strong>
+<ul>
+<li>Interface para classes de implementação.</li>
+<li>Define operações primitivas.</li>
+</ul>
+</li>
+<li><strong>Clerigo, Guerreiro, Ladino</strong>
+<ul>
+<li>Classes concretas que extendem a classe abstrata RpgCharacter.</li>
+</ul>
+</li>
+<li><strong>EnglishRender, PortugueseRender</strong>
+<ul>
+<li>Classes concretas que implementam a interface RpgRender.</li>
+</ul>
+</li>
+</ul>
+<h2 id="implementação">Implementação </h2>
+<h3 id="rpgcharacter-abstração">RpgCharacter (Abstração) </h3>
+<p></p><pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token keyword keyword-package">package</span> <span class="token namespace">bridge<span class="token punctuation">.</span>abst</span><span class="token punctuation">;</span>
 
-</div><p><a href="https://mermaid.js.org/syntax/classDiagram.html">Mermaid Class Diagram</a></p>
-<h2 id="markdown-preview-enhanced">Markdown Preview Enhanced </h2>
-<p><a href="https://shd101wyy.github.io/markdown-preview-enhanced/#/">Markdown Preview Enhanced</a></p>
-<p></p><pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">Classe</span><span class="token punctuation">{</span>
-    <span class="token keyword keyword-private">private</span> <span class="token keyword keyword-int">int</span> numero<span class="token punctuation">;</span>
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Map</span></span><span class="token punctuation">;</span>
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">bridge<span class="token punctuation">.</span>impl<span class="token punctuation">.</span></span><span class="token class-name">RpgRender</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-abstract">abstract</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">RpgCharacter</span> <span class="token punctuation">{</span>
+   
+    <span class="token keyword keyword-private">private</span> <span class="token class-name">RpgRender</span> render<span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-private">private</span> <span class="token keyword keyword-int">int</span> vida<span class="token punctuation">;</span>
+    <span class="token keyword keyword-private">private</span> <span class="token keyword keyword-int">int</span> forca<span class="token punctuation">;</span>
+    <span class="token keyword keyword-private">private</span> <span class="token keyword keyword-int">int</span> velocidade<span class="token punctuation">;</span>
+    <span class="token keyword keyword-private">private</span> <span class="token keyword keyword-int">int</span> resistencia<span class="token punctuation">;</span>
+    <span class="token keyword keyword-private">private</span> <span class="token keyword keyword-int">int</span> destreza<span class="token punctuation">;</span>
+    <span class="token keyword keyword-private">private</span> <span class="token keyword keyword-int">int</span> inteligencia<span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-protected">protected</span> <span class="token class-name">RpgCharacter</span> <span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> vida<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> forca<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> velocidade<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> resistencia<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> destreza<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> inteligencia<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-this">this</span><span class="token punctuation">.</span>vida <span class="token operator">=</span> vida<span class="token punctuation">;</span>
+        <span class="token keyword keyword-this">this</span><span class="token punctuation">.</span>forca <span class="token operator">=</span> forca<span class="token punctuation">;</span>
+        <span class="token keyword keyword-this">this</span><span class="token punctuation">.</span>velocidade <span class="token operator">=</span> velocidade<span class="token punctuation">;</span>
+        <span class="token keyword keyword-this">this</span><span class="token punctuation">.</span>resistencia <span class="token operator">=</span> resistencia<span class="token punctuation">;</span>
+        <span class="token keyword keyword-this">this</span><span class="token punctuation">.</span>destreza <span class="token operator">=</span> destreza<span class="token punctuation">;</span>
+        <span class="token keyword keyword-this">this</span><span class="token punctuation">.</span>inteligencia <span class="token operator">=</span> inteligencia<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token keyword keyword-void">void</span> <span class="token function">setRender</span><span class="token punctuation">(</span><span class="token class-name">RpgRender</span> render<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-this">this</span><span class="token punctuation">.</span>render <span class="token operator">=</span> render<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// Map chaves -&gt; 0 = danoLimpo | 1 = danoFinal | 2 = vidaRestanteInimigo</span>
+    <span class="token keyword keyword-public">public</span> <span class="token keyword keyword-abstract">abstract</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="token function">calcAtaque</span><span class="token punctuation">(</span><span class="token class-name">RpgCharacter</span> alvo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token keyword keyword-void">void</span> <span class="token function">renderizarAtaque</span><span class="token punctuation">(</span><span class="token class-name">RpgCharacter</span> alvo<span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+        <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>render <span class="token operator">!=</span> <span class="token keyword keyword-null">null</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            render<span class="token punctuation">.</span><span class="token function">renderizarAtaque</span><span class="token punctuation">(</span><span class="token keyword keyword-this">this</span><span class="token punctuation">,</span> alvo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword keyword-else">else</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Selecione um render para o personagem realizar seu ataque."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>        
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token keyword keyword-int">int</span> <span class="token function">getVida</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-return">return</span> vida<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token keyword keyword-int">int</span> <span class="token function">getForca</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-return">return</span> forca<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token keyword keyword-int">int</span> <span class="token function">getVelocidade</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-return">return</span> velocidade<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token keyword keyword-int">int</span> <span class="token function">getResistencia</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-return">return</span> resistencia<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token keyword keyword-int">int</span> <span class="token function">getDestreza</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-return">return</span> destreza<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token keyword keyword-int">int</span> <span class="token function">getInteligencia</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-return">return</span> inteligencia<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    
 <span class="token punctuation">}</span>
+
 </code></pre><p></p>
-<h3 id="html-export">HTML Export </h3>
-<p><a href="https://shd101wyy.github.io/markdown-preview-enhanced/#/html?id=html-export">html-export</a></p>
-<p>Right click at the preview, click HTML tab.<br>
-Then choose:</p>
-<p>HTML (offline) Choose this option if you are only going to use this html file locally.<br>
-HTML (cdn hosted) Choose this option if you want to deploy your html file remotely.</p>
-<p><img src="https://user-images.githubusercontent.com/1908863/28200455-d5a12d60-6831-11e7-8572-91d3845ce8cf.png" alt="screen shot 2017-07-14 at 1 14 28 am"></p>
+<h3 id="rpgrender-implementação">RpgRender (Implementação) </h3>
+<p></p><pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token keyword keyword-package">package</span> <span class="token namespace">bridge<span class="token punctuation">.</span>impl</span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">bridge<span class="token punctuation">.</span>abst<span class="token punctuation">.</span></span><span class="token class-name">RpgCharacter</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-interface">interface</span> <span class="token class-name">RpgRender</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token keyword keyword-void">void</span> <span class="token function">renderizarAtaque</span><span class="token punctuation">(</span><span class="token class-name">RpgCharacter</span> personagem<span class="token punctuation">,</span> <span class="token class-name">RpgCharacter</span> alvo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre><p></p>
+<h3 id="clerigo">Clerigo </h3>
+<p></p><pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token keyword keyword-package">package</span> <span class="token namespace">bridge<span class="token punctuation">.</span>abst</span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">HashMap</span></span><span class="token punctuation">;</span>
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Map</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">Clerigo</span> <span class="token keyword keyword-extends">extends</span> <span class="token class-name">RpgCharacter</span> <span class="token punctuation">{</span>
+    
+    <span class="token keyword keyword-public">public</span> <span class="token class-name">Clerigo</span><span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> vida<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> forca<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> velocidade<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> resistencia<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> destreza<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> inteligencia<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        
+        <span class="token keyword keyword-super">super</span><span class="token punctuation">(</span>vida<span class="token punctuation">,</span> forca<span class="token punctuation">,</span> velocidade<span class="token punctuation">,</span> resistencia<span class="token punctuation">,</span> destreza<span class="token punctuation">,</span> inteligencia<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="token function">calcAtaque</span><span class="token punctuation">(</span><span class="token class-name">RpgCharacter</span> alvo<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> dados <span class="token operator">=</span> <span class="token keyword keyword-new">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">Integer</span> danoLimpo <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword keyword-super">super</span><span class="token punctuation">.</span><span class="token function">getInteligencia</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token keyword keyword-super">super</span><span class="token punctuation">.</span><span class="token function">getDestreza</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">10</span><span class="token punctuation">;</span>
+        <span class="token class-name">Integer</span> danoFinal <span class="token operator">=</span> danoLimpo <span class="token operator">-</span> <span class="token punctuation">(</span>alvo<span class="token punctuation">.</span><span class="token function">getResistencia</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Integer</span> vidaRestanteAlvo <span class="token operator">=</span> alvo<span class="token punctuation">.</span><span class="token function">getVida</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> danoFinal<span class="token punctuation">;</span>
+        
+        dados<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> danoLimpo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        dados<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> danoFinal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        dados<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> vidaRestanteAlvo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-return">return</span> dados<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+
+<span class="token punctuation">}</span>
+
+</code></pre><p></p>
+<h3 id="guerreiro">Guerreiro </h3>
+<p></p><pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token keyword keyword-package">package</span> <span class="token namespace">bridge<span class="token punctuation">.</span>abst</span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">HashMap</span></span><span class="token punctuation">;</span>
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Map</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">Guerreiro</span> <span class="token keyword keyword-extends">extends</span> <span class="token class-name">RpgCharacter</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token class-name">Guerreiro</span><span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> vida<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> forca<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> velocidade<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> resistencia<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> destreza<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> inteligencia<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        
+        <span class="token keyword keyword-super">super</span><span class="token punctuation">(</span>vida<span class="token punctuation">,</span> forca<span class="token punctuation">,</span> velocidade<span class="token punctuation">,</span> resistencia<span class="token punctuation">,</span> destreza<span class="token punctuation">,</span> inteligencia<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="token function">calcAtaque</span><span class="token punctuation">(</span><span class="token class-name">RpgCharacter</span> alvo<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> dados <span class="token operator">=</span> <span class="token keyword keyword-new">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">Integer</span> danoLimpo <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword keyword-super">super</span><span class="token punctuation">.</span><span class="token function">getForca</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token keyword keyword-super">super</span><span class="token punctuation">.</span><span class="token function">getDestreza</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">10</span><span class="token punctuation">;</span>
+        <span class="token class-name">Integer</span> danoFinal <span class="token operator">=</span> danoLimpo <span class="token operator">-</span> <span class="token punctuation">(</span>alvo<span class="token punctuation">.</span><span class="token function">getResistencia</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Integer</span> vidaRestanteAlvo <span class="token operator">=</span> alvo<span class="token punctuation">.</span><span class="token function">getVida</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> danoFinal<span class="token punctuation">;</span>
+        
+        dados<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> danoLimpo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        dados<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> danoFinal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        dados<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> vidaRestanteAlvo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-return">return</span> dados<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    
+<span class="token punctuation">}</span>
+
+</code></pre><p></p>
+<h3 id="ladino">Ladino </h3>
+<p></p><pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token keyword keyword-package">package</span> <span class="token namespace">bridge<span class="token punctuation">.</span>abst</span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">HashMap</span></span><span class="token punctuation">;</span>
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Map</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">Ladino</span> <span class="token keyword keyword-extends">extends</span> <span class="token class-name">RpgCharacter</span> <span class="token punctuation">{</span>
+    
+    <span class="token keyword keyword-public">public</span> <span class="token class-name">Ladino</span><span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> vida<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> forca<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> velocidade<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> resistencia<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> destreza<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> inteligencia<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        
+        <span class="token keyword keyword-super">super</span><span class="token punctuation">(</span>vida<span class="token punctuation">,</span> forca<span class="token punctuation">,</span> velocidade<span class="token punctuation">,</span> resistencia<span class="token punctuation">,</span> destreza<span class="token punctuation">,</span> inteligencia<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="token function">calcAtaque</span><span class="token punctuation">(</span><span class="token class-name">RpgCharacter</span> alvo<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> dados <span class="token operator">=</span> <span class="token keyword keyword-new">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">Integer</span> danoLimpo <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword keyword-super">super</span><span class="token punctuation">.</span><span class="token function">getVelocidade</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token keyword keyword-super">super</span><span class="token punctuation">.</span><span class="token function">getDestreza</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">10</span><span class="token punctuation">;</span>
+        <span class="token class-name">Integer</span> danoFinal <span class="token operator">=</span> danoLimpo <span class="token operator">-</span> <span class="token punctuation">(</span>alvo<span class="token punctuation">.</span><span class="token function">getResistencia</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Integer</span> vidaRestanteAlvo <span class="token operator">=</span> alvo<span class="token punctuation">.</span><span class="token function">getVida</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> danoFinal<span class="token punctuation">;</span>
+        
+        dados<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> danoLimpo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        dados<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> danoFinal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        dados<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> vidaRestanteAlvo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-return">return</span> dados<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre><p></p>
+<h3 id="englishrender">EnglishRender </h3>
+<p></p><pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token keyword keyword-package">package</span> <span class="token namespace">bridge<span class="token punctuation">.</span>impl</span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Map</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">bridge<span class="token punctuation">.</span>abst<span class="token punctuation">.</span></span><span class="token class-name">RpgCharacter</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">EnglishRender</span> <span class="token keyword keyword-implements">implements</span> <span class="token class-name">RpgRender</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token keyword keyword-void">void</span> <span class="token function">renderizarAtaque</span><span class="token punctuation">(</span><span class="token class-name">RpgCharacter</span> personagem<span class="token punctuation">,</span> <span class="token class-name">RpgCharacter</span> alvo<span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> dados <span class="token operator">=</span> personagem<span class="token punctuation">.</span><span class="token function">calcAtaque</span><span class="token punctuation">(</span>alvo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span> <span class="token string">"---------------------------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span> <span class="token string">"Clean damage amount: "</span> <span class="token operator">+</span> dados<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span> <span class="token string">"Damage against target: "</span> <span class="token operator">+</span> dados<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span> <span class="token string">"Target's life: "</span> <span class="token operator">+</span> dados<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span> <span class="token string">"---------------------------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+
+</code></pre><p></p>
+<h3 id="portugueserender">PortugueseRender </h3>
+<p></p><pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token keyword keyword-package">package</span> <span class="token namespace">bridge<span class="token punctuation">.</span>impl</span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Map</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-import">import</span> <span class="token import"><span class="token namespace">bridge<span class="token punctuation">.</span>abst<span class="token punctuation">.</span></span><span class="token class-name">RpgCharacter</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">PortugueseRender</span> <span class="token keyword keyword-implements">implements</span> <span class="token class-name">RpgRender</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token keyword keyword-void">void</span> <span class="token function">renderizarAtaque</span><span class="token punctuation">(</span><span class="token class-name">RpgCharacter</span> personagem<span class="token punctuation">,</span> <span class="token class-name">RpgCharacter</span> alvo<span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> dados <span class="token operator">=</span> personagem<span class="token punctuation">.</span><span class="token function">calcAtaque</span><span class="token punctuation">(</span>alvo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span> <span class="token string">"---------------------------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span> <span class="token string">"Dano do ataque limpo: "</span> <span class="token operator">+</span> dados<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span> <span class="token string">"Dano causado ao alvo: "</span> <span class="token operator">+</span> dados<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span> <span class="token string">"Vida restante do alvo: "</span> <span class="token operator">+</span> dados<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span> <span class="token string">"---------------------------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre><p></p>
+<h2 id="aplicabilidade">Aplicabilidade </h2>
+<p>Quando utilizar o padrão <strong>Bridge</strong>:</p>
+<blockquote>
+<ul>
+<li>Quando desejar evitar um vínculo permanente entre uma abstração e sua implementação. Isso pode ocorrer, por exemplo, quando a implementação deve ser selecionada ou alterada em tempo de execução.</li>
+<li>Quando tanto as abstrações como suas implementações tiverem de ser extensíveis por meio de subclasses. Neste caso, o padrão Bridge permite combinar as diferentes abstrações e implementações e estendê-las independentemente.</li>
+<li>Quando mudanças na implementação de uma abstração não puderem ter impacto sobre os clientes; ou seja, quando o código dos mesmos não puder ser recompilado.</li>
+<li>Quando tiver uma proliferação de classes, como foi mostrado no primeiro diagrama da seção Motivação. Tal hierarquia de classes indica necessidade de separar um objeto em duas partes.</li>
+<li>Quando desejar compartilhar uma implementação entre múltiplos objetos (talvez usando a contagem de referências) e este fato deve estar oculto do cliente.</li>
+</ul>
+</blockquote>
+<h2 id="colaborações">Colaborações </h2>
+<ul>
+<li>A Abstração repassa as solicitações dos clientes para o seu objeto Implementador.</li>
+</ul>
+<h2 id="consequências">Consequências </h2>
+<h3 id="desacoplamento-da-interface-e-implementação">Desacoplamento da interface e implementação </h3>
+<p>Permite alterar a implementação em tempo de execução sem impactar a interface. Isso reduz dependências de compilação, garantindo compatibilidade binária entre versões de uma biblioteca e incentivando uma estrutura em camadas.</p>
+<h3 id="maior-extensibilidade">Maior extensibilidade </h3>
+<p>As hierarquias da Abstração e Implementador podem evoluir separadamente.</p>
+<h3 id="ocultação-de-detalhes-de-implementação">Ocultação de detalhes de implementação </h3>
+<p>Protege os clientes de complexidades internas, como compartilhamento de objetos e mecanismos de contagem de referências.</p>
 
       </div>
       
       
     
     
-    <script type="module">
-// TODO: If ZenUML gets integrated into mermaid in the future,
-//      we can remove the following lines.
-
-
-var MERMAID_CONFIG = ({"startOnLoad":false});
-if (typeof MERMAID_CONFIG !== 'undefined') {
-  MERMAID_CONFIG.startOnLoad = false
-  MERMAID_CONFIG.cloneCssStyles = false
-  MERMAID_CONFIG.theme = "default"
-}
-
-mermaid.initialize(MERMAID_CONFIG || {})
-if (typeof(window['Reveal']) !== 'undefined') {
-  function mermaidRevealHelper(event) {
-    var currentSlide = event.currentSlide
-    var diagrams = currentSlide.querySelectorAll('.mermaid')
-    for (var i = 0; i < diagrams.length; i++) {
-      var diagram = diagrams[i]
-      if (!diagram.hasAttribute('data-processed')) {
-        mermaid.init(null, diagram, ()=> {
-          Reveal.slide(event.indexh, event.indexv)
-        })
-      }
-    }
-  }
-  Reveal.addEventListener('slidetransitionend', mermaidRevealHelper)
-  Reveal.addEventListener('ready', mermaidRevealHelper)
-  await mermaid.run({
-    nodes: document.querySelectorAll('.mermaid')
-  })
-} else {
-  await mermaid.run({
-    nodes: document.querySelectorAll('.mermaid')
-  })
-}
-</script>
+    
     
     
     
